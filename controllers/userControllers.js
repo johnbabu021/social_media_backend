@@ -3,6 +3,8 @@ var jwt = require('jsonwebtoken');
 const ObjectId = require('mongodb').ObjectId
 const bcrypt = require('bcrypt');
 const { generateToken } = require("../utils/generateToken");
+const { findUserById } = require("../helpers/usersCollection");
+const { reject } = require("bcrypt/promises");
 //@desc sign up user
 //@route /api/auth/register
 //@access public
@@ -13,7 +15,13 @@ const signUpUser =
         // throw new Error('please enter all fields')
         if (username === undefined || email === undefined || password === undefined) {
             res.status(500)
-            next('enter all fields')
+           try {
+            throw new Error('enter all fields')
+    }
+    catch(err){
+        next(err)
+
+    }
         }
         const userExists = await usersCollection.findOne({ email })
         if (userExists) {
@@ -29,7 +37,10 @@ const signUpUser =
             // next()
             // throw new Error('user already exists')
         }
-        const userData = await bcrypt.hash(req.body.password, 10)
+        try{
+            
+        
+        const userData = await bcrypt.hash(password, 10)
             .then(async (hash) => {
                 const user = await usersCollection.insertOne({
                     username: username,
@@ -58,10 +69,14 @@ const signUpUser =
             res.status(400)
             throw new Error('Invalid user data')
         }
-
+        }
+        catch(err){
+            res.status(401)
+            next(err)
+        }
     }
 
-
+    
 
 //@desc login user
 //@route /api/auth/login
@@ -92,7 +107,6 @@ const loginUser = async (req, res, next) => {
                 _id:user._id,
                 username: user.username,
                 email: user.email,
-                posts:user.posts,
                 token: await generateToken(user._id)
 
             })
@@ -110,7 +124,29 @@ const loginUser = async (req, res, next) => {
 }
 
 
+const getUser=(req,res,next)=>{
+    return new Promise(async(resolve,reject)=>{
+        const {id}=req.params
+if(id){
+    resolve(id)
+}
+else{
+    reject('hala')
+}
+       
+        
+    }).then(async(data)=>{
+        const user=await findUserById(data)
+        res.status(200).json(user)
+        
+    }).catch(async(err)=>{
+        res.status(404)
+        res.json('please enter a valid user id')
+    })
+}
+
 module.exports = {
     signUpUser,
-    loginUser
+    loginUser,
+    getUser
 }

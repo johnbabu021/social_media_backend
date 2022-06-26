@@ -2,6 +2,9 @@ const jwt=require('jsonwebtoken')
 const { findUserById } = require('../helpers/usersCollection')
 
 const authMiddleware=async(req,res,next)=>{
+    // console.log(req.body.caption,'asdf')
+    console.log(req.findUserById)
+    // console.log(req.body.caption,"caption")
     const auth=req.headers.authorization
 if(auth){
  if(auth.startsWith('Bearer'))
@@ -21,6 +24,7 @@ new Promise((resolve,reject)=>{
     }
 })
 .then(()=>{
+    res.status(200)
     next()
 })
 .catch((err)=>{

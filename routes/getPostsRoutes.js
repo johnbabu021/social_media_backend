@@ -13,7 +13,7 @@ const storage=multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage })
-const { createController, getPostsWithUserId } = require('../controllers/postControllers')
+const { createController, getPostsWithUserId, getSinglePostWithPostId, updateCaption, addComment } = require('../controllers/postControllers')
 const { postsCollection } = require('../db/db')
 const authMiddleware = require('../middleware/authmiddleware')
 const router=express.Router()
@@ -29,6 +29,21 @@ res.status(200).json(await    postsCollection.find({}).toArray()
 //@auth bearer
 //@body req.body.caption
 //@body image file
-router.route('/create').post(authMiddleware,createController,upload.single('image'))
-router.route('/user/:id').get(getPostsWithUserId)
+router.route('/create').post(authMiddleware,createController,upload.single('image'),updateCaption)
+//@desc get posts from a user
+//@route /api/user/:id 
+//@access private
+router.route('/user/:id').get(authMiddleware,getPostsWithUserId)
+//@desc get post from a document
+//@route /api/post/:id 
+//@acess private
+router.route('/:id').get(authMiddleware,getSinglePostWithPostId)
+//@desc add comment
+//@api /api/posts/comment
+//@method PATCH
+//@access private
+//@ body 
+// postId:post id of the post to be updated
+// comment comment to be added to the post
+router.route('/comment').patch(authMiddleware,addComment)
 module.exports=router

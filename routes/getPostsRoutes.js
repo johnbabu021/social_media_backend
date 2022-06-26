@@ -13,7 +13,7 @@ const storage=multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage })
-const { createController, getPostsWithUserId, getSinglePostWithPostId, updateCaption, addComment } = require('../controllers/postControllers')
+const { createController, getPostsWithUserId, getSinglePostWithPostId, updateCaption, addComment, updateLike } = require('../controllers/postControllers')
 const { postsCollection } = require('../db/db')
 const authMiddleware = require('../middleware/authmiddleware')
 const router=express.Router()
@@ -46,4 +46,11 @@ router.route('/:id').get(authMiddleware,getSinglePostWithPostId)
 // postId:post id of the post to be updated
 // comment comment to be added to the post
 router.route('/comment').patch(authMiddleware,addComment)
+//@desc add likes
+//@api /api/posts/like
+//@method PATCH
+//@access private
+//@body
+// postId:post id of the post to be updated
+router.route('/like').patch(authMiddleware,updateLike)
 module.exports=router

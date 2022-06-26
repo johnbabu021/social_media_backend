@@ -91,6 +91,35 @@ else{
         next(err)
     })
 }
+const updateLike=(req,res,next)=>{
+    const {postId}=req.body
+    return new Promise((resolve,reject)=>{
+        if(postId){
+            resolve(postId)
+        }
+        else{
+            reject('postId is a required field')
+        }
+    }).then(async(postId)=>{
+        const post=await findPostById(postId)
+        postsCollection.updateOne(
+            {
+                _id:post._id
+            },
+            {
+                $push:{
+                    likes:{
+                       user:req.user._id 
+                    }
+                }
+            }
+        )
+        const updatedPost=await findPostById(post._id)
+res.status(200).json(updatedPost)
+    }).catch(err=>{
+        next(err)
+    })
+}
 
 const getPostsWithUserId=async(req,res)=>{
     const {id}=req.params
@@ -111,4 +140,7 @@ module.exports={createController,
     updateCaption,
     getPostsWithUserId,
     getSinglePostWithPostId,
-addComment}
+addComment,
+updateLike
+
+}

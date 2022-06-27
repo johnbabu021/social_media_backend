@@ -1,4 +1,50 @@
     {
-    "postId":"62b9bfe4897de457821714ad",
-    "caption":"updated"
+  "commentId":"62b9e30ab2afdb80d9150fb9"
+},
+
+
+
+{"commnetId": "62b9cde75bc6f13ceedc7153"
+},
+{
+  "commnetId": "62b9ce2b08bc0fb0893cfb73"
+},
+{
+  "commnetId": "62b9d18aba9ce47c08b93bac"
+},
+{
+  "commnetId": "62b9d18cba9ce47c08b93bad"
+},
+{
+  "commnetId": "62b9d18dba9ce47c08b93bae"
 }
+//62b9d3fa567a3532b1af3907 --pst
+
+{
+    "_id": "62b9cdbda854f572b479e627",
+    "user": "62b965fec37943f24b1581db",
+    "caption": "new file",
+    "comments": [
+      {
+        "commnetId": "62b9cde75bc6f13ceedc7153"
+      },
+      {
+        "commnetId": "62b9ce2b08bc0fb0893cfb73"
+      },
+      {
+        "commnetId": "62b9d18aba9ce47c08b93bac"
+      },
+      {
+        "commnetId": "62b9d18cba9ce47c08b93bad"
+      },
+      {
+        "commnetId": "62b9d18dba9ce47c08b93bae"
+      }
+    ],
+    "likes": [
+  
+    ],
+    "shares": 0,
+    "views": 0,
+    "type": "png"
+  }

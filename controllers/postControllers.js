@@ -5,6 +5,7 @@ const ObjectId = require('mongodb').ObjectId
 const { findUserById } = require('../helpers/usersCollection')
 // var path = require('path')
 const {unlink}=require('node:fs/promises')
+const { findCommentById } = require("../helpers/commentCollection")
 // const { resolve } = require("path")
 const deletePostController = async (req, res) => {
     console.log(req.user)
@@ -133,7 +134,7 @@ const addComment = (req, res, next) => {
             {
                 $push: {
                     comments: {
-                        commnetId: comment.insertedId,
+                        commentId: comment.insertedId,
                     }
                 }
             }
@@ -144,6 +145,34 @@ const addComment = (req, res, next) => {
     }).catch(err => {
         next(err)
     })
+}
+const deleteComment=async(req,res,next)=>{
+    console.log(req.body.commentId)
+    const comment=await findCommentById(req.body.commentId)
+    console.log(comment)
+    
+    await postsCollection.updateOne({
+        _id:new ObjectId(comment.post)
+    },
+    {
+        $pull:{
+            comments:{
+                commentId:new ObjectId(req.body.commentId)
+            }
+        }
+    })
+    await commentCollection.deleteOne({
+        _id:new ObjectId(req.body.commentId)
+    })
+    .then(async(data)=>{
+        console.log(req.body.commentId,"cmmetn")
+                res.status(200).json(comment)
+            }).catch((err)=>{
+                res.status(400)
+                next(err)
+            })
+
+
 }
 const addLike = (req, res, next) => {
     const { postId } = req.body
@@ -197,6 +226,7 @@ module.exports = {
     getSinglePostWithPostId,
     addComment,
     addLike,
+    deleteComment,
     deletePostController
 
 }

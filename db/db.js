@@ -6,6 +6,7 @@ const client = new MongoClient(process.env.MNGD);
 const db=client.db('social_media')
 const postsCollection=db.collection("posts")
 const usersCollection=db.collection('users')
+const commentCollection=db.collection('comments')
 async function run() {
     try {
       // Connect the client to the server
@@ -26,5 +27,6 @@ async function run() {
     run,
     db,
     postsCollection,
-    usersCollection
+    usersCollection,
+    commentCollection
 }

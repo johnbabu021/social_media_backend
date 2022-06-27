@@ -1,4 +1,4 @@
-const { usersCollection } = require("../db/db")
+const { usersCollection, postsCollection, commentCollection } = require("../db/db")
 var jwt = require('jsonwebtoken');
 const ObjectId = require('mongodb').ObjectId
 const bcrypt = require('bcrypt');
@@ -10,7 +10,7 @@ const { reject } = require("bcrypt/promises");
 //@access public
 const signUpUser =
     async (req, res, next) => {
-        const { username, password, email } = req.body
+        const { username, password, email } =await req.body
         console.log(username, password, email)
         // throw new Error('please enter all fields')
         if (username === undefined || email === undefined || password === undefined) {
@@ -137,7 +137,51 @@ else{
         
     }).then(async(data)=>{
         const user=await findUserById(data)
-        res.status(200).json(user)
+        const posts=   await postsCollection.aggregate([
+            {$match:
+            {
+                user:user._id
+            }
+            },
+            // {
+            //     $lookup:
+            //     {
+            //         from:'users',
+            //         localField:"_id",
+            //         foreignField:"user",
+            //         as:"posts"
+            //     }
+            // }
+        ]).toArray()
+
+// await posts.map(({comments})=>{
+// comments.map(({commentId})=>{
+
+// })
+// })
+
+    //   const comment=  await commentCollection.aggregate([
+    //         {
+    //             $lookup:{
+    //                 from:"posts",
+    //                 localField:"_id",
+    //                 foreignField:"comments.commentId",
+    //                 as:"comments"
+    //             }
+    //         }
+    //     ]).toArray()
+    //     console.log(comment)
+
+        res.status(200).json({
+            _id:user._id,
+            username:user.username,
+            email:user.email,
+            // postId:user.posts,
+            posts:posts
+        })
+ 
+        // console.log(posts)
+
         
     }).catch(async(err)=>{
         res.status(404)

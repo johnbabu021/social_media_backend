@@ -176,6 +176,8 @@ else{
             _id:user._id,
             username:user.username,
             email:user.email,
+            followers:user.followers,
+            following:user.following,
             // postId:user.posts,
             posts:posts
         })
@@ -189,8 +191,58 @@ else{
     })
 }
 
+const followUser=async(req,res)=>{
+    console.log(req.body.followUserId)
+    await usersCollection.updateOne({
+        _id:new ObjectId(req.body.followUserId)
+    },
+    {
+        $push:{
+            followers:
+            {userId:req.user._id}
+        }
+    }
+    )
+    await usersCollection.updateOne({
+        _id:new ObjectId(req.user._id)
+    },
+    {
+       $push:{
+following:{
+userId:req.body.followUserId
+}
+       } 
+    })
+    res.status(200).json(true)
+}
+const unFollowUser=async(req,res)=>{
+    await usersCollection.updateOne({
+_id:new ObjectId(req.body.followUserId)
+    },
+    {
+        $pull:{
+            followers:{
+                userId:req.user._id
+            }
+        }
+    })
+
+    await usersCollection.updateOne({
+        _id:new ObjectId(req.user_id)
+    },{
+        $pull:{
+            following:{
+                userId:req.body.followUserId
+            }
+        }
+    })
+    res.status(200).json(true)
+}
+
 module.exports = {
     signUpUser,
     loginUser,
-    getUser
+    getUser,
+    followUser,
+    unFollowUser
 }

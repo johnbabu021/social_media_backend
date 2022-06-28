@@ -37,6 +37,6 @@ app.use('/api/users',getUsersRoute)
 app.use('/api/auth',getAuthRoutes)
 app.use(errHandler)
 app.use(notFound)
-app.listen(8000,()=>{
-    console.log('app listening to port 8000')
+app.listen(process.env.PORT || 8000,()=>{
+  console.log(process.env.PORT)
 })

@@ -2,9 +2,12 @@ const { usersCollection, postsCollection, commentCollection } = require("../db/d
 var jwt = require('jsonwebtoken');
 const ObjectId = require('mongodb').ObjectId
 const bcrypt = require('bcrypt');
+// var app = express()
 const { generateToken } = require("../utils/generateToken");
 const { findUserById } = require("../helpers/usersCollection");
-const { reject } = require("bcrypt/promises");
+// const { reject } = require("bcrypt/promises");
+// var session = require('express-session')
+
 //@desc sign up user
 //@route /api/auth/register
 //@access public
@@ -62,6 +65,7 @@ const signUpUser =
                 },
                 token: await generateToken(userData.insertedId)
             }
+
             res.status(201).json(resultedUser)
 
         }
@@ -103,13 +107,19 @@ const loginUser = async (req, res, next) => {
             return result
         })
         if (data)
+          {
+//             app.set('trust proxy', 1) // trust first proxy
+// app.use(session({
+//     secret:true,
+//     user:user
+// }))
             res.status(200).json({
                 _id:user._id,
                 username: user.username,
                 email: user.email,
                 token: await generateToken(user._id)
 
-            })
+            })}
         else {
             res.status(401)
             try {

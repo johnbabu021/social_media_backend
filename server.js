@@ -21,7 +21,7 @@ run()
 // postSchema()
 app.use(express.json())
 
-// app.use(express.static('uploads/'))
+app.use(express.static('uploads/'))
 
 
 

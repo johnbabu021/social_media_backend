@@ -12,10 +12,10 @@ console.log(process.env.MNGD) // remove this after you've confirmed it working
 const app=express()
 run()
 
-// app.use(bodyParser.json())
-  // app.use(bodyParser.urlencoded({
-  //     extended: true
-  //   }));
+app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({
+      extended: true
+    }));
   app.use(bodyParser.urlencoded())
 // userSchema() 
 // postSchema()

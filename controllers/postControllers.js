@@ -36,7 +36,7 @@ catch(err){
 
 }
 const createController = async (req, res, next) => {
-    console.log(req.body.caption)
+    console.log(req.body,"image")
     const insertedDoc = await postsCollection.insertOne({
         user: req.user._id,
         caption: '',
@@ -56,6 +56,7 @@ const createController = async (req, res, next) => {
     )
     const insertedData = await postsCollection.findOne({ _id: new ObjectId(insertedDoc.insertedId) })
     req.image = insertedData
+    console.log(req.image)
     next()
 }
 // const updateImageType=(req,res,next)=>{

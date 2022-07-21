@@ -3,6 +3,7 @@ const { findUserById } = require('../helpers/usersCollection')
 
 const authMiddleware=async(req,res,next)=>{
     // console.log(req.body.caption,'asdf')
+    console.log(req.body,"BODY")
     // console.log(req.body,"body")
     console.log(req.headers.authorization,"auth")
     // console.log(req.findUserById)

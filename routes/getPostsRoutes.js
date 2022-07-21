@@ -7,6 +7,7 @@ const storage=multer.diskStorage({
         cb(null,'./uploads/original/posts')
     },
     filename:async(req,file,cb)=>{
+        console.log(file,"file")
         // console.log(file)
         const fileType=file.originalname.substring(file.originalname.indexOf('.')+1)
         await postsCollection.updateOne({
@@ -30,7 +31,7 @@ const router=express.Router()
 
 router.route('/').get(async(req,res)=>{
 res.status(200).json(await    postsCollection.find({}).toArray()
-)
+)   
 })
 //@desc create a post
 //@route /api/posts/post
